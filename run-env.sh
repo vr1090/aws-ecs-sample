@@ -2,7 +2,7 @@
 set -euo pipefail
 
 usage() {
-	echo "Usage: $0 <env> [plan|apply|init]"
+	echo "Usage: $0 <env> [plan|apply|destroy|init]"
 	echo "  env: prod | staging | dev"
 	exit 1
 }
@@ -53,6 +53,9 @@ case "$ACTION" in
 		;;
 	apply)
 		terraform apply -var-file="$TFVARS_FILE"
+		;;
+	destroy)
+		terraform destroy -var-file="$TFVARS_FILE"
 		;;
 	*)
 		echo "Unknown action: $ACTION"

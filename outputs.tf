@@ -15,7 +15,7 @@ output "private_subnet_id" {
 
 output "ecs_cluster_id" {
   description = "ID of the ECS cluster."
-  value       = module.ecs_cluster.cluster_id
+  value       = module.ecs_cluster.id
 }
 
 output "ecs_service_name" {

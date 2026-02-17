@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 5.0"
+      version = ">= 5.0, < 6.0"
     }
   }
 }
@@ -109,8 +109,10 @@ resource "aws_launch_template" "ecs" {
 
   vpc_security_group_ids = [aws_security_group.ecs_instance.id]
 
-  user_data = base64encode("#!/bin/bash\n" +
-    "echo ECS_CLUSTER=${local.cluster_name} >> /etc/ecs/ecs.config\n"
+  user_data = base64encode(<<-EOT
+    #!/bin/bash
+    echo ECS_CLUSTER=${local.cluster_name} >> /etc/ecs/ecs.config
+  EOT
   )
 
   tag_specifications {
@@ -126,7 +128,7 @@ resource "aws_autoscaling_group" "ecs" {
   min_size            = var.asg_min_size
   max_size            = var.asg_max_size
   desired_capacity    = var.asg_desired_capacity
-  vpc_zone_identifier = [module.vpc.private_subnet_id]
+  vpc_zone_identifier = module.vpc.private_subnets
 
   launch_template {
     id      = aws_launch_template.ecs.id
@@ -283,7 +285,7 @@ module "ecs_service" {
   version = "~> 5.0"
 
   name        = "${var.name_prefix}-service"
-  cluster_arn = module.ecs_cluster.cluster_arn
+  cluster_arn = module.ecs_cluster.arn
   launch_type = "EC2"
   desired_count = var.desired_count
 
@@ -291,25 +293,25 @@ module "ecs_service" {
   security_group_ids = [module.ecs_service_sg.security_group_id]
 
   task_exec_iam_role_arn = aws_iam_role.ecs_task_execution.arn
-  task_iam_role_arn      = null
+  tasks_iam_role_arn      = null
   cpu                    = var.task_cpu
   memory                 = var.task_memory
   network_mode           = "awsvpc"
   requires_compatibilities = ["EC2"]
 
-  container_definitions = jsonencode([
-    {
+  container_definitions = {
+    (var.container_name) = {
       name      = var.container_name
       image     = var.container_image
       essential = true
-      portMappings = [
+      port_mappings = [
         {
           containerPort = var.container_port
           hostPort      = var.container_port
           protocol      = "tcp"
         }
       ]
-      logConfiguration = {
+      log_configuration = {
         logDriver = "awslogs"
         options = {
           awslogs-group         = aws_cloudwatch_log_group.ecs.name
@@ -318,7 +320,7 @@ module "ecs_service" {
         }
       }
     }
-  ])
+  }
 
   load_balancer = [
     {

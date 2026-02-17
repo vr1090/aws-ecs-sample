@@ -2,9 +2,9 @@ aws_region         = "ap-southeast-3"
 name_prefix        = "app-prod"
 
 vpc_cidr            = "10.20.0.0/16"
-public_subnet_cidr  = "10.20.1.0/24"
-private_subnet_cidr = "10.20.2.0/24"
-availability_zone   = "ap-southeast-3a"
+public_subnet_cidrs = ["10.20.1.0/24", "10.20.3.0/24"]
+private_subnet_cidrs = ["10.20.2.0/24", "10.20.4.0/24"]
+availability_zones  = ["ap-southeast-3a", "ap-southeast-3b"]
 
 container_name  = "app"
 container_image = "nginx:latest"

@@ -2,9 +2,9 @@ aws_region         = "ap-southeast-3"
 name_prefix        = "app-staging"
 
 vpc_cidr            = "10.10.0.0/16"
-public_subnet_cidr  = "10.10.1.0/24"
-private_subnet_cidr = "10.10.2.0/24"
-availability_zone   = "ap-southeast-3a"
+public_subnet_cidrs = ["10.10.1.0/24", "10.10.3.0/24"]
+private_subnet_cidrs = ["10.10.2.0/24", "10.10.4.0/24"]
+availability_zones  = ["ap-southeast-3a", "ap-southeast-3b"]
 
 container_name  = "app"
 container_image = "nginx:latest"

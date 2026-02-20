@@ -16,15 +16,15 @@ fi
 
 case "$ENV_NAME" in
 	prod)
-		BACKEND_FILE="backend-prod.hcl"
+		BACKEND_FILE="backend/backend-prod.hcl"
 		TFVARS_FILE="env/prod.tfvars"
 		;;
 	staging)
-		BACKEND_FILE="backend-staging.hcl"
+		BACKEND_FILE="backend/backend-staging.hcl"
 		TFVARS_FILE="env/staging.tfvars"
 		;;
 	dev)
-		BACKEND_FILE="backend-dev.hcl"
+		BACKEND_FILE="backend/backend-dev.hcl"
 		TFVARS_FILE="env/dev.tfvars"
 		;;
 	*)

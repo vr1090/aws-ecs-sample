@@ -27,3 +27,18 @@ output "alb_dns_name" {
   description = "DNS name of the ALB."
   value       = module.alb.lb_dns_name
 }
+
+output "postgres_endpoint" {
+  description = "PostgreSQL endpoint address."
+  value       = aws_db_instance.postgres.address
+}
+
+output "postgres_port" {
+  description = "PostgreSQL port."
+  value       = aws_db_instance.postgres.port
+}
+
+output "postgres_master_secret_arn" {
+  description = "Secrets Manager ARN for the managed PostgreSQL master password."
+  value       = try(aws_db_instance.postgres.master_user_secret[0].secret_arn, null)
+}

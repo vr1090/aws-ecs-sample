@@ -107,6 +107,30 @@ variable "asg_desired_capacity" {
   default     = 1
 }
 
+variable "db_name" {
+  description = "Initial PostgreSQL database name."
+  type        = string
+  default     = "appdb"
+}
+
+variable "db_username" {
+  description = "Master username for PostgreSQL."
+  type        = string
+  default     = "appadmin"
+}
+
+variable "db_port" {
+  description = "Port for PostgreSQL."
+  type        = number
+  default     = 5432
+}
+
+variable "db_allocated_storage" {
+  description = "Initial allocated storage (GiB) for PostgreSQL."
+  type        = number
+  default     = 20
+}
+
 variable "tags" {
   description = "Common tags to apply to all resources."
   type        = map(string)
